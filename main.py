@@ -22,6 +22,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 
+from sklearn.metrics import confusion_matrix
+
 #import dataset
 
 file = "framingham.csv"
@@ -476,7 +478,49 @@ print("_____________________")
 
 
 
+import tensorflow as tf
+print (("Tensorflow version: {0}").format(tf.__version__))
 
-plt.boxplot(X)
-plt.show()
+tensor_classifier = tf.keras.models.Sequential()
 
+#layer
+tensor_classifier.add(tf.keras.layers.Dense(50, activation="relu", input_dim = X_train_power.shape[1]))
+
+
+tensor_classifier.add(tf.keras.layers.Dense(units=1, activation="sigmoid"))
+
+#compile tensorflow
+tensor_classifier.compile(optimizer="adam",
+                            loss = tf.losses.binary_crossentropy,
+                            metrics =["accuracy"])
+
+model_summary = tensor_classifier.summary()
+model_config = tensor_classifier.get_config()
+
+#train tensorflow
+
+history = tensor_classifier.fit(X_train_power, Y_train, epochs=50, batch_size=32)
+
+
+#train tensorflow evaluation
+print("evalutate on train data")
+
+y_train_predicted_tensor = tensor_classifier.predict(X_train_power)
+y_train_predicted_tensor_approx = (np.rint(y_train_predicted_tensor))
+cm = confusion_matrix(y_train_predicted_tensor_approx, Y_train)
+print(cm)
+
+results = tensor_classifier.evaluate(X_train_power, Y_train, batch_size = 128)
+print("test loss, test acc:", results)
+
+
+#test tensorflow evaluation
+print("evalutate on test data")
+
+y_test_tensor = tensor_classifier.predict(X_test_power)
+y_test_predicted_tensor_approx = (np.rint(y_test_tensor))
+cm = confusion_matrix(y_test_predicted_tensor_approx, Y_test)
+print(cm)
+
+results = tensor_classifier.evaluate(X_test_power, Y_test, batch_size = 128)
+print("test loss, test acc:", results)

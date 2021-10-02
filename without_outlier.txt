@@ -52,7 +52,7 @@ model score MLP maxAbs Scaler: 0.865
 model score MLP robust Scaler: 0.861
 model score MLP quantile normal Scaler: 0.857
 model score MLP quantile Uniform Scaler: 0.866
-model score MLP power  Scaler: 0.869
+model score MLP power  Scaler: 0.874
 model score MLP normalize Scaler: 0.857
 _____________________
 _____________________

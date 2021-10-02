@@ -23,6 +23,7 @@ from sklearn.neural_network import MLPClassifier
 
 from sklearn.metrics import confusion_matrix
 
+
 #import dataset
 
 file = "framingham.csv"
@@ -32,56 +33,6 @@ dataset = dataset.dropna()
 dataset = dataset.reset_index(drop=True)
 dataset.index
 
-
-
-
-plt.boxplot(dataset["age"])
-plt.xticks([1], ['age'])
-#plt.savefig('age_boxplot.png')
-plt.show()
-
-plt.boxplot(dataset["totChol"])
-plt.xticks([1], ['totChol'])
-#plt.savefig('totChol_boxplot.png')
-plt.show()
-
-
-plt.boxplot(dataset["sysBP"])
-plt.xticks([1], ['sysBP'])
-#plt.savefig('sysBP_boxplot.png')
-plt.show()
-
-
-plt.boxplot(dataset["diaBP"])
-plt.xticks([1], ['diaBP'])
-#plt.savefig('diaBP_boxplot.png')
-plt.show()
-
-
-plt.boxplot(dataset["BMI"])
-plt.xticks([1], ['BMI'])
-#plt.savefig('BMI_boxplot.png')
-plt.show()
-
-
-plt.boxplot(dataset["heartRate"])
-plt.xticks([1], ['heartRate'])
-#plt.savefig('heartRate_boxplot.png')
-plt.show()
-
-
-plt.boxplot(dataset["glucose"])
-plt.xticks([1], ['glucose'])
-#plt.savefig('glucose_boxplot.png')
-plt.show()
-
-
-plt.boxplot(dataset["cigsPerDay"])
-plt.xticks([1], ['cigsPerDay'])
-#plt.savefig('cigsPerDay_boxplot.png')
-plt.show()
-
- 
 print(''' Detection totChol ''')
 # IQR
 Q1 = np.percentile(dataset['totChol'], 25,
@@ -264,14 +215,15 @@ dataset = dataset.reset_index(drop=True)
  
 print("New Shape cigsPerDay: ", dataset.shape)
 
+dataset = dataset[["male", "diabetes", "totChol", "diaBP", "heartRate", "TenYearCHD"]]
 
-X = dataset.iloc[:, 0:15].values
+X = dataset.iloc[:, 0:5].values
 Y = dataset.iloc[:,-1 ].values
 
 
 
 
-X = pd.DataFrame(X, columns=["male", "age", "education", "currentSmoker", "cigsPerDay", "BPMeds", "prevalentStroke", "prevalentHyp", "diabetes", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"])
+X = pd.DataFrame(X, columns=["male", "diabetes", "totChol",  "diaBP", "heartRate"])
 
 
 
@@ -288,25 +240,10 @@ enc = OneHotEncoder(handle_unknown='ignore')
 
 enc_male = pd.DataFrame(enc.fit_transform(X[["male"]]).toarray())
 X = X.drop("male", axis=1)
-enc_education = pd.DataFrame(enc.fit_transform(X[["education"]]).toarray())
-X = X.drop("education", axis=1)
-enc_currentSmoker = pd.DataFrame(enc.fit_transform(X[["currentSmoker"]]).toarray())
-X = X.drop("currentSmoker", axis=1)
-enc_BPMeds = pd.DataFrame(enc.fit_transform(X[["BPMeds"]]).toarray())
-X = X.drop("BPMeds", axis=1)
-enc_prevalentStroke = pd.DataFrame(enc.fit_transform(X[["prevalentStroke"]]).toarray())
-X = X.drop("prevalentStroke", axis=1)
-enc_prevalentHyp = pd.DataFrame(enc.fit_transform(X[["prevalentHyp"]]).toarray())
-X = X.drop("prevalentHyp", axis=1)
 enc_diabetes = pd.DataFrame(enc.fit_transform(X[["diabetes"]]).toarray())
 X = X.drop("diabetes", axis=1)
 
 X = X.join(enc_male, rsuffix="_male")
-X = X.join(enc_education, rsuffix="_education")
-X = X.join(enc_currentSmoker, rsuffix="_currentSmoker")
-X = X.join(enc_BPMeds, rsuffix="_BPMeds")
-X = X.join(enc_prevalentHyp, rsuffix="_prevalentHyp")
-X = X.join(enc_prevalentStroke, rsuffix="_prevalentStroke")
 X = X.join(enc_diabetes, rsuffix="_diabetes")
 
 
@@ -335,8 +272,8 @@ X_test_normalize = pd.DataFrame.copy(X_test)
 ####### STANDARD SCALER
 #######
 
-X_train_standard_scaler[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_standardScaler.fit_transform(X_train_standard_scaler[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_standard_scaler[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_standardScaler.fit_transform(X_test_standard_scaler[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_standard_scaler[["totChol", "diaBP", "heartRate"]] = stand_standardScaler.fit_transform(X_train_standard_scaler[["totChol", "diaBP", "heartRate"]])
+X_test_standard_scaler[["totChol", "diaBP", "heartRate"]] = stand_standardScaler.fit_transform(X_test_standard_scaler[["totChol", "diaBP", "heartRate"]])
 
 classifier_logistic_regression_standardScaler = LogisticRegression()
 classifier_logistic_regression_standardScaler.fit(X_train_standard_scaler, Y_train)
@@ -365,8 +302,8 @@ print("model score MLP Standard scaler: %.3f" % classifier_MLP_standardScaler.sc
 #######
 
 
-X_train_minMax[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_MinMaxScaler.fit_transform(X_train_minMax[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_minMax[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_MinMaxScaler.fit_transform(X_test_minMax[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_minMax[["totChol", "diaBP", "heartRate"]] = stand_MinMaxScaler.fit_transform(X_train_minMax[["totChol", "diaBP", "heartRate"]])
+X_test_minMax[["totChol", "diaBP", "heartRate"]] = stand_MinMaxScaler.fit_transform(X_test_minMax[["totChol", "diaBP", "heartRate"]])
 
 
 classifier_logistic_regression_minMax = LogisticRegression()
@@ -400,8 +337,8 @@ print("model score MLP minMax Scaler: %.3f" % classifier_MLP_minMax.score(X_test
 #######
 
 
-X_train_maxAbs[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_MaxAbsScaler.fit_transform(X_train_maxAbs[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_maxAbs[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_MaxAbsScaler.fit_transform(X_test_maxAbs[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_maxAbs[["totChol", "diaBP", "heartRate"]] = stand_MaxAbsScaler.fit_transform(X_train_maxAbs[["totChol", "diaBP", "heartRate"]])
+X_test_maxAbs[["totChol", "diaBP", "heartRate"]] = stand_MaxAbsScaler.fit_transform(X_test_maxAbs[["totChol", "diaBP", "heartRate"]])
 
 
 
@@ -435,8 +372,8 @@ print("model score MLP maxAbs Scaler: %.3f" % classifier_MLP_maxAbs.score(X_test
 ####### ROBUST SCALER
 #######
 
-X_train_robust[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_RobustScaler.fit_transform(X_train_robust[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_robust[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_RobustScaler.fit_transform(X_test_robust[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_robust[["totChol", "diaBP", "heartRate"]] = stand_RobustScaler.fit_transform(X_train_robust[["totChol", "diaBP", "heartRate"]])
+X_test_robust[["totChol", "diaBP", "heartRate"]] = stand_RobustScaler.fit_transform(X_test_robust[["totChol", "diaBP", "heartRate"]])
 
 
 
@@ -472,8 +409,8 @@ print("model score MLP robust Scaler: %.3f" % classifier_MLP_robust.score(X_test
 ####### QUANTILE NORMAL SCALER
 #######
 
-X_train_quantileNormal[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_quantileTransformNormal.fit_transform(X_train_quantileNormal[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_quantileNormal[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_quantileTransformNormal.fit_transform(X_test_quantileNormal[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_quantileNormal[["totChol", "diaBP", "heartRate"]] = stand_quantileTransformNormal.fit_transform(X_train_quantileNormal[["totChol", "diaBP", "heartRate"]])
+X_test_quantileNormal[["totChol", "diaBP", "heartRate"]] = stand_quantileTransformNormal.fit_transform(X_test_quantileNormal[["totChol", "diaBP", "heartRate"]])
 
 
 
@@ -508,8 +445,8 @@ print("model score MLP quantile normal Scaler: %.3f" % classifier_MLP_quantileNo
 ####### QUANTILE UNIFORM SCALER
 #######
 
-X_train_quantile_uniform[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_quantileTransform_Uniform.fit_transform(X_train_quantile_uniform[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_quantile_uniform[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_quantileTransform_Uniform.fit_transform(X_test_quantile_uniform[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_quantile_uniform[["totChol", "diaBP", "heartRate"]] = stand_quantileTransform_Uniform.fit_transform(X_train_quantile_uniform[["totChol", "diaBP", "heartRate"]])
+X_test_quantile_uniform[["totChol", "diaBP", "heartRate"]] = stand_quantileTransform_Uniform.fit_transform(X_test_quantile_uniform[["totChol", "diaBP", "heartRate"]])
 
 
 
@@ -547,8 +484,8 @@ print("model score MLP quantile Uniform Scaler: %.3f" % classifier_MLP_mquantile
 ####### POWER SCALER
 #######
 
-X_train_power[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_Power.fit_transform(X_train_power[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_power[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_Power.fit_transform(X_test_power[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_power[["totChol", "diaBP", "heartRate"]] = stand_Power.fit_transform(X_train_power[["totChol", "diaBP", "heartRate"]])
+X_test_power[["totChol", "diaBP", "heartRate"]] = stand_Power.fit_transform(X_test_power[["totChol", "diaBP", "heartRate"]])
 
 
 
@@ -574,23 +511,16 @@ classifier_MLP_standPower.fit(X_train_power, Y_train)
 print("model score MLP power  Scaler: %.3f" % classifier_MLP_standPower.score(X_test_power, Y_test))
 
 
-y_train_predicted = classifier_MLP_standPower.predict(X_train_power)
-y_train_predicted_approx = (np.rint(y_train_predicted))
-cm = confusion_matrix(y_train_predicted_approx, Y_train)
-print(cm)
 
-y_test_predicted = classifier_MLP_standPower.predict(X_test_power)
-y_test_predicted_approx = (np.rint(y_test_predicted))
-cm = confusion_matrix(y_test_predicted_approx, Y_test)
-print(cm)
+
 
 
 #######
 ####### NORMALIZE SCALER
 #######
 
-X_train_normalize[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_normalizer.fit_transform(X_train_normalize[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
-X_test_normalize[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]] = stand_normalizer.fit_transform(X_test_normalize[["age", "cigsPerDay", "totChol", "sysBP", "diaBP", "BMI", "heartRate", "glucose"]])
+X_train_normalize[["totChol", "diaBP", "heartRate"]] = stand_normalizer.fit_transform(X_train_normalize[["totChol", "diaBP", "heartRate"]])
+X_test_normalize[["totChol", "diaBP", "heartRate"]] = stand_normalizer.fit_transform(X_test_normalize[["totChol", "diaBP", "heartRate"]])
 
 
 
