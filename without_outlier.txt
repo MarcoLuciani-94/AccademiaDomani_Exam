@@ -1,0 +1,58 @@
+#LOGISTIC REGRESSION#
+_____________________
+model score Logistic Regression Standard scaler: 0.861
+model score Logistic Regression minMax Scaler: 0.861
+model score Logistic Regression maxAbs Scaler: 0.861
+model score Logistic Regression robust Scaler: 0.861
+model score Logistic Regression quantile normal Scaler: 0.860
+model score Logistic Regression quantile Uniform Scaler: 0.860
+model score Logistic Regression power  Scaler: 0.861
+model score Logistic Regression normalize Scaler: 0.858
+#SVC#
+_____________________
+model score SVC Standard scaler: 0.858
+model score SVC minMax Scaler: 0.858
+model score SVC maxAbs Scaler: 0.858
+model score SVC robust Scaler: 0.858
+model score SVC quantile normal Scaler: 0.858
+model score SVC quantile Uniform Scaler: 0.858
+model score SVC power  Scaler: 0.858
+model score SVC normalize Scaler: 0.858
+_____________________
+_____________________
+#DT#
+_____________________
+model score DT Standard scaler: 0.750
+model score DT minMax Scaler: 0.750
+model score DT maxAbs Scaler: 0.734
+model score DT robust Scaler: 0.735
+model score DT quantile normal Scaler: 0.745
+model score DT quantile Uniform Scaler: 0.745
+model score DT power  Scaler: 0.776
+model score DT normalize Scaler: 0.786
+_____________________
+_____________________
+#RF#
+_____________________
+model score RF Standard scaler: 0.860
+model score RF minMax Scaler: 0.860
+model score RF maxAbs Scaler: 0.863
+model score RF robust Scaler: 0.860
+model score RF quantile normal Scaler: 0.861
+model score RF quantile Uniform Scaler: 0.861
+model score RF power  Scaler: 0.865
+model score RF normalize Scaler: 0.857
+_____________________
+_____________________
+#MLP#
+_____________________
+model score MLP Standard scaler: 0.868
+model score MLP minMax Scaler: 0.863
+model score MLP maxAbs Scaler: 0.865
+model score MLP robust Scaler: 0.861
+model score MLP quantile normal Scaler: 0.857
+model score MLP quantile Uniform Scaler: 0.866
+model score MLP power  Scaler: 0.869
+model score MLP normalize Scaler: 0.857
+_____________________
+_____________________
